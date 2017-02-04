@@ -1,293 +1,210 @@
--- phpMyAdmin SQL Dump
--- version 4.5.1
--- http://www.phpmyadmin.net
---
--- Host: 127.0.0.1
--- Generation Time: Feb 01, 2017 at 03:39 PM
--- Server version: 10.1.13-MariaDB
--- PHP Version: 7.0.6
+/*
+SQLyog Professional v12.09 (64 bit)
+MySQL - 10.1.13-MariaDB : Database - globalindo
+*********************************************************************
+*/
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
+/*!40101 SET NAMES utf8 */;
 
+/*!40101 SET SQL_MODE=''*/;
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`globalindo` /*!40100 DEFAULT CHARACTER SET latin1 */;
 
---
--- Database: `globalindo`
---
+USE `globalindo`;
 
--- --------------------------------------------------------
+/*Table structure for table `barang` */
 
---
--- Table structure for table `barang`
---
+DROP TABLE IF EXISTS `barang`;
 
 CREATE TABLE `barang` (
-  `id_barang` int(11) NOT NULL,
+  `id_barang` int(11) NOT NULL AUTO_INCREMENT,
   `nama` varchar(25) NOT NULL,
   `harga` int(20) NOT NULL,
   `qty` int(20) NOT NULL,
-  `gambar` varchar(100) NOT NULL,
+  `gambar` varchar(100) DEFAULT NULL,
   `tgl_diterima` date NOT NULL,
-  `id_supplier` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `id_supplier` int(11) NOT NULL,
+  `ip_address` varchar(16) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `id_user` int(11) NOT NULL,
+  PRIMARY KEY (`id_barang`),
+  KEY `id_supplier` (`id_supplier`),
+  KEY `id_user` (`id_user`),
+  CONSTRAINT `barang_ibfk_1` FOREIGN KEY (`id_supplier`) REFERENCES `supplier` (`id_supplier`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `barang_ibfk_2` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
+/*Data for the table `barang` */
 
---
--- Table structure for table `nota`
---
+insert  into `barang`(`id_barang`,`nama`,`harga`,`qty`,`gambar`,`tgl_diterima`,`id_supplier`,`ip_address`,`timestamp`,`id_user`) values (2,'blue monster',20000,20000,'file_Barang1_1486216248.jpg','2017-02-04',1,'::1','2017-02-04 21:03:19',1),(6,'boneka monster',400000,30,'file_boneka_monster_1486193928.jpg','2017-02-20',1,'::1','2017-02-04 14:38:48',6);
+
+/*Table structure for table `nota` */
+
+DROP TABLE IF EXISTS `nota`;
 
 CREATE TABLE `nota` (
-  `id_nota` int(11) NOT NULL,
+  `id_nota` int(11) NOT NULL AUTO_INCREMENT,
   `no_nota` varchar(25) NOT NULL,
   `tgl_buat` datetime NOT NULL,
   `id_sales` int(11) NOT NULL,
   `id_toko` int(11) NOT NULL,
-  `total_jual` int(25) NOT NULL
+  `total_jual` int(25) NOT NULL,
+  `ip_address` varchar(16) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `id_user` int(11) NOT NULL,
+  PRIMARY KEY (`id_nota`),
+  KEY `id_sales` (`id_sales`,`id_toko`),
+  KEY `id_toko` (`id_toko`),
+  KEY `id_user` (`id_user`),
+  CONSTRAINT `nota_ibfk_1` FOREIGN KEY (`id_sales`) REFERENCES `sales` (`id_sales`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `nota_ibfk_2` FOREIGN KEY (`id_toko`) REFERENCES `toko` (`id_toko`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `nota_ibfk_3` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
+/*Data for the table `nota` */
 
---
--- Table structure for table `pengembalian`
---
+/*Table structure for table `pengembalian` */
+
+DROP TABLE IF EXISTS `pengembalian`;
 
 CREATE TABLE `pengembalian` (
-  `id_pengembalian` int(11) NOT NULL,
+  `id_pengembalian` int(11) NOT NULL AUTO_INCREMENT,
   `id_barang` int(11) NOT NULL,
   `tgl_kembali` date NOT NULL,
   `kondisi` varchar(20) NOT NULL,
   `id_toko` int(11) NOT NULL,
-  `jumlah` int(20) NOT NULL
+  `jumlah` int(20) NOT NULL,
+  `ip_address` varchar(16) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `id_user` int(11) NOT NULL,
+  PRIMARY KEY (`id_pengembalian`),
+  KEY `id_barang` (`id_barang`),
+  KEY `id_toko` (`id_toko`),
+  KEY `id_user` (`id_user`),
+  CONSTRAINT `pengembalian_ibfk_1` FOREIGN KEY (`id_barang`) REFERENCES `barang` (`id_barang`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `pengembalian_ibfk_2` FOREIGN KEY (`id_toko`) REFERENCES `toko` (`id_toko`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `pengembalian_ibfk_3` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
+/*Data for the table `pengembalian` */
 
---
--- Table structure for table `sales`
---
+/*Table structure for table `sales` */
+
+DROP TABLE IF EXISTS `sales`;
 
 CREATE TABLE `sales` (
-  `id_sales` int(11) NOT NULL,
+  `id_sales` int(11) NOT NULL AUTO_INCREMENT,
   `nama` varchar(100) NOT NULL,
-  `alamat` int(100) NOT NULL,
+  `alamat` varchar(300) NOT NULL,
   `nik` int(25) NOT NULL,
-  `no_telp` int(25) NOT NULL,
-  `email` int(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `no_telp` varchar(25) NOT NULL,
+  `email` varchar(200) NOT NULL,
+  `ip_address` varchar(16) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `id_user` int(11) NOT NULL,
+  PRIMARY KEY (`id_sales`),
+  KEY `id_user` (`id_user`),
+  CONSTRAINT `sales_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
+/*Data for the table `sales` */
 
---
--- Table structure for table `supplier`
---
+insert  into `sales`(`id_sales`,`nama`,`alamat`,`nik`,`no_telp`,`email`,`ip_address`,`timestamp`,`id_user`) values (2,'Sales1','jogja',1239128931,'081192832322','sales1@com.com','::1','2017-02-02 22:50:15',1),(4,'Sales2','solo',122121,'2939129','sales2@com.com','::1','2017-02-03 00:05:44',1);
+
+/*Table structure for table `supplier` */
+
+DROP TABLE IF EXISTS `supplier`;
 
 CREATE TABLE `supplier` (
-  `id_supplier` int(11) NOT NULL,
-  `nama` varchar(100) NOT NULL,
+  `id_supplier` int(11) NOT NULL AUTO_INCREMENT,
+  `nama_supplier` varchar(100) NOT NULL,
   `alamat` varchar(100) NOT NULL,
-  `no_telp` varchar(25) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `no_telp` varchar(25) NOT NULL,
+  `ip_address` varchar(16) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `id_user` int(11) NOT NULL,
+  PRIMARY KEY (`id_supplier`),
+  KEY `id_user` (`id_user`),
+  CONSTRAINT `supplier_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
+/*Data for the table `supplier` */
 
---
--- Table structure for table `toko`
---
+insert  into `supplier`(`id_supplier`,`nama_supplier`,`alamat`,`no_telp`,`ip_address`,`timestamp`,`id_user`) values (1,'Supplier1','jakarta','3423434234','::1','2017-02-04 11:56:33',1);
+
+/*Table structure for table `toko` */
+
+DROP TABLE IF EXISTS `toko`;
 
 CREATE TABLE `toko` (
-  `id_toko` int(11) NOT NULL,
+  `id_toko` int(11) NOT NULL AUTO_INCREMENT,
   `nama` varchar(100) NOT NULL,
   `alamat` varchar(100) NOT NULL,
-  `no_telp` varchar(25) NOT NULL
+  `no_telp` varchar(25) NOT NULL,
+  `ip_address` varchar(16) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `id_user` int(11) NOT NULL,
+  PRIMARY KEY (`id_toko`),
+  KEY `id_user` (`id_user`),
+  CONSTRAINT `toko_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
+/*Data for the table `toko` */
 
---
--- Table structure for table `transaksi`
---
+/*Table structure for table `transaksi` */
+
+DROP TABLE IF EXISTS `transaksi`;
 
 CREATE TABLE `transaksi` (
-  `id_transaksi` int(11) NOT NULL,
+  `id_transaksi` int(11) NOT NULL AUTO_INCREMENT,
   `id_barang` int(11) NOT NULL,
   `harga_jual` int(20) NOT NULL,
   `id_toko` int(11) NOT NULL,
   `laba` int(20) NOT NULL,
   `qty` int(20) NOT NULL,
   `diskon` int(3) NOT NULL,
-  `id_nota` int(11) NOT NULL
+  `id_nota` int(11) NOT NULL,
+  `ip_address` varchar(16) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `id_user` int(11) NOT NULL,
+  PRIMARY KEY (`id_transaksi`),
+  KEY `id_barang` (`id_barang`,`id_toko`,`id_nota`),
+  KEY `id_toko` (`id_toko`),
+  KEY `id_nota` (`id_nota`),
+  KEY `id_user` (`id_user`),
+  CONSTRAINT `transaksi_ibfk_1` FOREIGN KEY (`id_barang`) REFERENCES `barang` (`id_barang`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `transaksi_ibfk_2` FOREIGN KEY (`id_toko`) REFERENCES `toko` (`id_toko`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `transaksi_ibfk_3` FOREIGN KEY (`id_nota`) REFERENCES `nota` (`id_nota`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `transaksi_ibfk_4` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
+/*Data for the table `transaksi` */
 
---
--- Table structure for table `user`
---
+/*Table structure for table `user` */
+
+DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `user` (
-  `id_user` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(25) NOT NULL,
   `password` varchar(100) NOT NULL,
   `level` varchar(5) NOT NULL,
-  `id_sales` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `sales` varchar(100) DEFAULT '0',
+  `ip_address` varchar(16) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id_user`),
+  KEY `id_sales` (`sales`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `user`
---
+/*Data for the table `user` */
 
-INSERT INTO `user` (`id_user`, `username`, `password`, `level`, `id_sales`) VALUES
-(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'admin', NULL);
+insert  into `user`(`id_user`,`username`,`password`,`level`,`sales`,`ip_address`,`timestamp`) values (1,'admin','21232f297a57a5a743894a0e4a801fc3','admin','0','','2017-02-02 22:43:58'),(4,'charly','8ddf878039b70767c4a5bcf4f0c4f65e','sales','Sales1','::1','2017-02-04 10:33:27'),(6,'admin2','47bce5c74f589f4867dbd57e9ca9f808','admin','0','::1','2017-02-04 11:28:57');
 
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `barang`
---
-ALTER TABLE `barang`
-  ADD PRIMARY KEY (`id_barang`),
-  ADD KEY `id_supplier` (`id_supplier`);
-
---
--- Indexes for table `nota`
---
-ALTER TABLE `nota`
-  ADD PRIMARY KEY (`id_nota`),
-  ADD KEY `id_sales` (`id_sales`,`id_toko`),
-  ADD KEY `id_toko` (`id_toko`);
-
---
--- Indexes for table `pengembalian`
---
-ALTER TABLE `pengembalian`
-  ADD PRIMARY KEY (`id_pengembalian`),
-  ADD KEY `id_barang` (`id_barang`),
-  ADD KEY `id_toko` (`id_toko`);
-
---
--- Indexes for table `sales`
---
-ALTER TABLE `sales`
-  ADD PRIMARY KEY (`id_sales`);
-
---
--- Indexes for table `supplier`
---
-ALTER TABLE `supplier`
-  ADD PRIMARY KEY (`id_supplier`);
-
---
--- Indexes for table `toko`
---
-ALTER TABLE `toko`
-  ADD PRIMARY KEY (`id_toko`);
-
---
--- Indexes for table `transaksi`
---
-ALTER TABLE `transaksi`
-  ADD PRIMARY KEY (`id_transaksi`),
-  ADD KEY `id_barang` (`id_barang`,`id_toko`,`id_nota`),
-  ADD KEY `id_toko` (`id_toko`),
-  ADD KEY `id_nota` (`id_nota`);
-
---
--- Indexes for table `user`
---
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`id_user`),
-  ADD KEY `id_sales` (`id_sales`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `barang`
---
-ALTER TABLE `barang`
-  MODIFY `id_barang` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `nota`
---
-ALTER TABLE `nota`
-  MODIFY `id_nota` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `pengembalian`
---
-ALTER TABLE `pengembalian`
-  MODIFY `id_pengembalian` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `sales`
---
-ALTER TABLE `sales`
-  MODIFY `id_sales` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `supplier`
---
-ALTER TABLE `supplier`
-  MODIFY `id_supplier` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `toko`
---
-ALTER TABLE `toko`
-  MODIFY `id_toko` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `transaksi`
---
-ALTER TABLE `transaksi`
-  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `user`
---
-ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `barang`
---
-ALTER TABLE `barang`
-  ADD CONSTRAINT `barang_ibfk_1` FOREIGN KEY (`id_supplier`) REFERENCES `supplier` (`id_supplier`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `nota`
---
-ALTER TABLE `nota`
-  ADD CONSTRAINT `nota_ibfk_1` FOREIGN KEY (`id_sales`) REFERENCES `sales` (`id_sales`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `nota_ibfk_2` FOREIGN KEY (`id_toko`) REFERENCES `toko` (`id_toko`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `pengembalian`
---
-ALTER TABLE `pengembalian`
-  ADD CONSTRAINT `pengembalian_ibfk_1` FOREIGN KEY (`id_barang`) REFERENCES `barang` (`id_barang`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `pengembalian_ibfk_2` FOREIGN KEY (`id_toko`) REFERENCES `toko` (`id_toko`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `transaksi`
---
-ALTER TABLE `transaksi`
-  ADD CONSTRAINT `transaksi_ibfk_1` FOREIGN KEY (`id_barang`) REFERENCES `barang` (`id_barang`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `transaksi_ibfk_2` FOREIGN KEY (`id_toko`) REFERENCES `toko` (`id_toko`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `transaksi_ibfk_3` FOREIGN KEY (`id_nota`) REFERENCES `nota` (`id_nota`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `user`
---
-ALTER TABLE `user`
-  ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`id_sales`) REFERENCES `sales` (`id_sales`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
