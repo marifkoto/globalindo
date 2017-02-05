@@ -49,7 +49,7 @@ DROP TABLE IF EXISTS `nota`;
 CREATE TABLE `nota` (
   `id_nota` int(11) NOT NULL AUTO_INCREMENT,
   `no_nota` varchar(25) NOT NULL,
-  `tgl_buat` datetime NOT NULL,
+  `tgl_buat` date NOT NULL,
   `id_sales` int(11) NOT NULL,
   `id_toko` int(11) NOT NULL,
   `total_jual` int(25) NOT NULL,
@@ -63,9 +63,11 @@ CREATE TABLE `nota` (
   CONSTRAINT `nota_ibfk_1` FOREIGN KEY (`id_sales`) REFERENCES `sales` (`id_sales`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `nota_ibfk_2` FOREIGN KEY (`id_toko`) REFERENCES `toko` (`id_toko`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `nota_ibfk_3` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 /*Data for the table `nota` */
+
+insert  into `nota`(`id_nota`,`no_nota`,`tgl_buat`,`id_sales`,`id_toko`,`total_jual`,`ip_address`,`timestamp`,`id_user`) values (1,'43dwsv353','2017-02-22',4,1,650000,'::1','2017-02-05 18:18:27',1),(3,'923918jdiajwi','2017-02-06',2,1,300000,'::1','2017-02-05 18:18:40',1);
 
 /*Table structure for table `pengembalian` */
 
@@ -98,10 +100,10 @@ DROP TABLE IF EXISTS `sales`;
 
 CREATE TABLE `sales` (
   `id_sales` int(11) NOT NULL AUTO_INCREMENT,
-  `nama` varchar(100) NOT NULL,
-  `alamat` varchar(300) NOT NULL,
+  `nama_sales` varchar(100) NOT NULL,
+  `alamat_sales` varchar(300) NOT NULL,
   `nik` int(25) NOT NULL,
-  `no_telp` varchar(25) NOT NULL,
+  `no_telp_sales` varchar(25) NOT NULL,
   `email` varchar(200) NOT NULL,
   `ip_address` varchar(16) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -113,7 +115,7 @@ CREATE TABLE `sales` (
 
 /*Data for the table `sales` */
 
-insert  into `sales`(`id_sales`,`nama`,`alamat`,`nik`,`no_telp`,`email`,`ip_address`,`timestamp`,`id_user`) values (2,'Sales1','jogja',1239128931,'081192832322','sales1@com.com','::1','2017-02-02 22:50:15',1),(4,'Sales2','solo',122121,'2939129','sales2@com.com','::1','2017-02-03 00:05:44',1);
+insert  into `sales`(`id_sales`,`nama_sales`,`alamat_sales`,`nik`,`no_telp_sales`,`email`,`ip_address`,`timestamp`,`id_user`) values (2,'Sales1','jogja',1239128931,'081192832322','sales1@com.com','::1','2017-02-02 22:50:15',1),(4,'Sales2','solo',122121,'2939129','sales2@com.com','::1','2017-02-03 00:05:44',1);
 
 /*Table structure for table `supplier` */
 
@@ -142,18 +144,20 @@ DROP TABLE IF EXISTS `toko`;
 
 CREATE TABLE `toko` (
   `id_toko` int(11) NOT NULL AUTO_INCREMENT,
-  `nama` varchar(100) NOT NULL,
-  `alamat` varchar(100) NOT NULL,
-  `no_telp` varchar(25) NOT NULL,
+  `nama_toko` varchar(100) NOT NULL,
+  `alamat_toko` varchar(100) NOT NULL,
+  `no_telp_toko` varchar(25) NOT NULL,
   `ip_address` varchar(16) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `id_user` int(11) NOT NULL,
   PRIMARY KEY (`id_toko`),
   KEY `id_user` (`id_user`),
   CONSTRAINT `toko_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 /*Data for the table `toko` */
+
+insert  into `toko`(`id_toko`,`nama_toko`,`alamat_toko`,`no_telp_toko`,`ip_address`,`timestamp`,`id_user`) values (1,'Toko Boneka','jogja','4534543','::1','2017-02-05 10:07:38',1);
 
 /*Table structure for table `transaksi` */
 
@@ -180,9 +184,11 @@ CREATE TABLE `transaksi` (
   CONSTRAINT `transaksi_ibfk_2` FOREIGN KEY (`id_toko`) REFERENCES `toko` (`id_toko`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `transaksi_ibfk_3` FOREIGN KEY (`id_nota`) REFERENCES `nota` (`id_nota`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `transaksi_ibfk_4` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 /*Data for the table `transaksi` */
+
+insert  into `transaksi`(`id_transaksi`,`id_barang`,`harga_jual`,`id_toko`,`laba`,`qty`,`diskon`,`id_nota`,`ip_address`,`timestamp`,`id_user`) values (1,2,50000,1,30000,5,0,1,'::1','2017-02-05 12:38:08',1);
 
 /*Table structure for table `user` */
 

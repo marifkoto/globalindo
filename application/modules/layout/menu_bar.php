@@ -30,7 +30,7 @@
                             <a href="#"><i class="fa fa-industry fa-fw"></i> Toko</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-sticky-note fa-fw"></i> Nota</a>
+                            <a href="<?php echo base_url();?>nota"><i class="fa fa-sticky-note fa-fw"></i> Nota</a>
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-cart-plus fa-fw"></i> Transaksi</a>
