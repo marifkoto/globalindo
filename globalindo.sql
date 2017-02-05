@@ -63,11 +63,11 @@ CREATE TABLE `nota` (
   CONSTRAINT `nota_ibfk_1` FOREIGN KEY (`id_sales`) REFERENCES `sales` (`id_sales`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `nota_ibfk_2` FOREIGN KEY (`id_toko`) REFERENCES `toko` (`id_toko`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `nota_ibfk_3` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 /*Data for the table `nota` */
 
-insert  into `nota`(`id_nota`,`no_nota`,`tgl_buat`,`id_sales`,`id_toko`,`total_jual`,`ip_address`,`timestamp`,`id_user`) values (1,'43dwsv353','2017-02-22',4,1,650000,'::1','2017-02-05 18:18:27',1),(3,'923918jdiajwi','2017-02-06',2,1,300000,'::1','2017-02-05 18:18:40',1);
+insert  into `nota`(`id_nota`,`no_nota`,`tgl_buat`,`id_sales`,`id_toko`,`total_jual`,`ip_address`,`timestamp`,`id_user`) values (1,'43dwsv353','2017-02-22',4,1,650000,'::1','2017-02-05 18:18:27',1),(3,'923918jdiajwi','2017-02-06',2,1,300000,'::1','2017-02-05 18:18:40',1),(4,'kmawd/sda/3423','2017-02-15',2,1,500000,'::1','2017-02-05 18:24:51',1);
 
 /*Table structure for table `pengembalian` */
 
